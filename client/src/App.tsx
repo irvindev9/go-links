@@ -20,6 +20,7 @@ import {
   ApiClientError,
   type GoLink,
 } from './api';
+import { buildTargetUrl, type UrlProtocol } from './urlUtils';
 
 export function App() {
   const [links, setLinks] = useState<GoLink[]>([]);
@@ -30,6 +31,7 @@ export function App() {
 
   // Form state
   const [slug, setSlug] = useState('');
+  const [protocol, setProtocol] = useState<UrlProtocol>('https://');
   const [targetUrl, setTargetUrl] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,6 +49,7 @@ export function App() {
   // Accessible IDs
   const slugInputId = useId();
   const slugErrorId = useId();
+  const protocolSelectId = useId();
   const urlInputId = useId();
   const urlErrorId = useId();
   const descInputId = useId();
@@ -84,9 +87,10 @@ export function App() {
     setIsSubmitting(true);
 
     try {
+      const resolvedTargetUrl = buildTargetUrl(targetUrl, protocol);
       const result = await createLink({
         slug,
-        targetUrl,
+        targetUrl: resolvedTargetUrl,
         description,
       });
 
@@ -304,33 +308,49 @@ export function App() {
                 >
                   Destination URL <span className="text-red-500">*</span>
                 </label>
-                <input
-                  id={urlInputId}
-                  name="targetUrl"
-                  type="url"
-                  required
-                  autoCorrect="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                  value={targetUrl}
-                  onChange={(e) => {
-                    setTargetUrl(e.target.value);
-                    if (formError?.fieldErrors?.targetUrl) {
-                      setFormError((prev) =>
-                        prev
-                          ? {
-                              ...prev,
-                              fieldErrors: { ...prev.fieldErrors, targetUrl: [] },
-                            }
-                          : null,
-                      );
-                    }
-                  }}
-                  placeholder="https://figma.com/file/company-design-system"
-                  aria-invalid={urlFieldError ? 'true' : undefined}
-                  aria-describedby={urlFieldError ? urlErrorId : undefined}
-                  className="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20"
-                />
+                <div className="flex rounded-xl border border-slate-300 bg-white focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/20 overflow-hidden">
+                  <label htmlFor={protocolSelectId} className="sr-only">
+                    URL Protocol
+                  </label>
+                  <select
+                    id={protocolSelectId}
+                    name="protocol"
+                    value={protocol}
+                    onChange={(e) => setProtocol(e.target.value as UrlProtocol)}
+                    className="inline-flex items-center px-3 py-2 bg-slate-100 text-slate-500 font-mono text-sm border-r border-slate-300 focus:outline-none hover:bg-slate-200/60 cursor-pointer transition-colors"
+                  >
+                    <option value="https://">https://</option>
+                    <option value="http://">http://</option>
+                  </select>
+                  <input
+                    id={urlInputId}
+                    name="targetUrl"
+                    type="text"
+                    inputMode="url"
+                    required
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={false}
+                    value={targetUrl}
+                    onChange={(e) => {
+                      setTargetUrl(e.target.value);
+                      if (formError?.fieldErrors?.targetUrl) {
+                        setFormError((prev) =>
+                          prev
+                            ? {
+                                ...prev,
+                                fieldErrors: { ...prev.fieldErrors, targetUrl: [] },
+                              }
+                            : null,
+                        );
+                      }
+                    }}
+                    placeholder="irvin-lopez.com or figma.com/file/design-system"
+                    aria-invalid={urlFieldError ? 'true' : undefined}
+                    aria-describedby={urlFieldError ? urlErrorId : undefined}
+                    className="w-full px-3.5 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                  />
+                </div>
                 {urlFieldError && (
                   <p id={urlErrorId} className="mt-1 text-xs text-red-600">
                     {urlFieldError}

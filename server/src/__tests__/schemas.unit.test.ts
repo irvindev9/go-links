@@ -1,12 +1,25 @@
 import { describe, it, expect } from '@jest/globals';
 import {
   normalizeSlug,
+  buildTargetUrl,
   createLinkSchema,
   listLinksQuerySchema,
   idParamSchema,
 } from '../schemas.js';
 
 describe('Unit: Schemas & Input Validation (FR-01, FR-02)', () => {
+  describe('buildTargetUrl()', () => {
+    it('joins the selected protocol when the input URL omits http:// or https://', () => {
+      expect(buildTargetUrl('irvin-lopez.com', 'https://')).toBe('https://irvin-lopez.com');
+      expect(buildTargetUrl('irvin-lopez.com', 'http://')).toBe('http://irvin-lopez.com');
+    });
+
+    it('omits joining the protocol selector when user input already starts with http:// or https://', () => {
+      expect(buildTargetUrl('http://irvin-lopez.com', 'https://')).toBe('http://irvin-lopez.com');
+      expect(buildTargetUrl('https://irvin-lopez.com', 'http://')).toBe('https://irvin-lopez.com');
+    });
+  });
+
   describe('normalizeSlug()', () => {
     it('trims whitespace, lowercases, and strips leading go/ or slashes', () => {
       expect(normalizeSlug('  GO/Design-System  ')).toBe('design-system');

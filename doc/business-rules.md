@@ -35,8 +35,12 @@ To prevent human error when typing or sharing shortcuts in chat tools, all incom
 
 ## 2. Destination URL (`targetUrl`) & Security Rules
 
-### BR-05: Strict Protocol Allowlist (Anti-XSS / Open-Protocol Guard)
-- Every `targetUrl` must be a valid RFC-3986 URL using either the **`http:`** or **`https:`** protocol.
+### BR-05: Strict Protocol Allowlist & Smart Protocol Selector
+- The frontend creation form includes a protocol selector (`https://` by default, or `http://`) styled identically to the `go/` alias prefix.
+- When creating a shortcut (`buildTargetUrl`):
+  - If the user enters a bare domain or path (e.g., `irvin-lopez.com`), the selected protocol (`https://` or `http://`) is prepended automatically (`https://irvin-lopez.com`).
+  - If the user pastes or types a URL that **already begins with `http://` or `https://`**, the selector join is omitted so the protocol is never duplicated.
+- Every resolved `targetUrl` must be a valid RFC-3986 URL using either the **`http:`** or **`https:`** protocol.
 - Unsafe or non-web schemes such as `javascript:`, `data:`, `vbscript:`, `file:`, or `ftp:` are explicitly rejected with HTTP `400 Bad Request` (`VALIDATION_ERROR`).
 - **Maximum length**: `2,048` characters.
 
@@ -112,7 +116,7 @@ User / Browser
 | **BR-02** | Allowed slug characters & nested slashes | `server/src/schemas.ts` (`SLUG_REGEX`) | `schemas.unit.test.ts`, `app.test.ts` |
 | **BR-03** | Slug length bounds (`2..64`) | `server/src/schemas.ts` (`createLinkSchema`) | `schemas.unit.test.ts` |
 | **BR-04** | Unique slug & `409 Conflict` protection | `server/src/db.ts` (`LinkRepository.create`) | `db.unit.test.ts`, `app.test.ts` |
-| **BR-05** | HTTP/HTTPS protocol allowlist | `server/src/schemas.ts` (`createLinkSchema`) | `schemas.unit.test.ts`, `app.test.ts` |
+| **BR-05** | HTTP/HTTPS protocol selector & allowlist | `client/src/urlUtils.ts`, `server/src/schemas.ts` | `urlUtils.unit.test.ts`, `schemas.unit.test.ts`, `app.test.ts` |
 | **BR-06** | Optional description (`<= 200` chars) | `server/src/schemas.ts` (`createLinkSchema`) | `schemas.unit.test.ts` |
 | **BR-07** | `302 Found` redirect semantics | `server/src/app.ts` (`GET /go/*`) | `app.test.ts` |
 | **BR-08** | Atomic `clicks` & `lastAccessedAt` update | `server/src/db.ts` (`recordVisitAndGetTarget`) | `db.unit.test.ts`, `app.test.ts` |

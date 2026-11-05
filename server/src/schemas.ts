@@ -2,12 +2,39 @@ import { z } from 'zod';
 
 const SLUG_REGEX = /^[a-z0-9]+(?:[-/][a-z0-9]+)*$/;
 
+export type UrlProtocol = 'https://' | 'http://';
+
 export const normalizeSlug = (raw: string): string =>
   raw
     .trim()
     .toLowerCase()
     .replace(/^go\/+/, '')
     .replace(/^\/+|\/+$/g, '');
+
+/**
+ * Builds a complete destination URL from user input and the selected protocol.
+ * If the user input already starts with `http://` or `https://` (case-insensitive),
+ * or contains another explicit URI scheme, the protocol prefix is omitted.
+ */
+export const buildTargetUrl = (
+  rawInput: string,
+  protocol: UrlProtocol = 'https://',
+): string => {
+  const trimmed = rawInput.trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed.replace(/^https?:\/\//i, (match) => match.toLowerCase());
+  }
+
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  return `${protocol}${trimmed.replace(/^\/+/, '')}`;
+};
 
 export const createLinkSchema = z.object({
   slug: z
