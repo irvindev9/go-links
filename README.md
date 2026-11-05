@@ -2,7 +2,9 @@
 
 A lightweight, production-minded internal URL shortcut service (e.g., `go/design-system`, `go/oncall`, `go/payroll`) built using **Spec-Driven Development (SDD)** with **TypeScript**, **Express**, **SQLite (`better-sqlite3`)**, **Zod**, **React (Vite)**, and **Jest**.
 
-> **Specification First**: See [`SPEC.md`](./SPEC.md) for the formal functional requirements (`FR-01`–`FR-06`), data model, API contract, error envelope, and observability/accessibility standards that guided this implementation.
+> **Specification & Business Rules**:
+> - [`SPEC.md`](./SPEC.md): Formal functional requirements (`FR-01`–`FR-06`), data model, API contract, and observability/accessibility standards.
+> - [`doc/business-rules.md`](./doc/business-rules.md): Detailed domain invariants (`BR-01`–`BR-12`), validation rules, redirect semantics, and traceability matrix to Jest tests.
 
 ---
 
@@ -49,6 +51,8 @@ npm run typecheck
 .
 ├── SPEC.md                 # Single Source of Truth specification (requirements, schema, API contract)
 ├── README.md               # Setup guide, assumptions, tradeoffs, and roadmap
+├── doc/
+│   └── business-rules.md   # Domain invariants (BR-01..BR-12) & test traceability matrix
 ├── package.json            # npm workspaces root config (server + client)
 ├── tsconfig.base.json      # Shared strict TypeScript configuration
 ├── server/                 # Express + SQLite + Zod backend
