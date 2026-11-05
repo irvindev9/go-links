@@ -2,6 +2,8 @@
 
 A lightweight, production-minded internal URL shortcut service (e.g., `go/design-system`, `go/oncall`, `go/payroll`) built using **Spec-Driven Development (SDD)** with **TypeScript**, **Express**, **SQLite (`better-sqlite3`)**, **Zod**, **React (Vite)**, and **Jest**.
 
+- **Live Demo**: [https://golinks.irvin-lopez.com](https://golinks.irvin-lopez.com)
+
 > **Specification & Business Rules**:
 > - [`SPEC.md`](./SPEC.md): Formal functional requirements (`FR-01`–`FR-06`), data model, API contract, and observability/accessibility standards.
 > - [`doc/business-rules.md`](./doc/business-rules.md): Detailed domain invariants (`BR-01`–`BR-12`), validation rules, redirect semantics, and traceability matrix to Jest tests.
