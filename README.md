@@ -2,7 +2,14 @@
 
 A lightweight, production-minded internal URL shortcut service (e.g., `go/design-system`, `go/oncall`, `go/payroll`) built using **Spec-Driven Development (SDD)** with **TypeScript**, **Express**, **SQLite (`better-sqlite3`)**, **Zod**, **React (Vite)**, and **Jest**.
 
-- **Live Demo**: [https://golinks.irvin-lopez.com](https://golinks.irvin-lopez.com)
+## Live Deployment
+
+| Environment | URL | Description |
+| :--- | :--- | :--- |
+| **Web Application (UI)** | [https://golinks.irvin-lopez.com](https://golinks.irvin-lopez.com) | Interactive shortcut directory, search, and creation form |
+| **Sample Redirect (`302`)** | [https://golinks.irvin-lopez.com/go/design-system](https://golinks.irvin-lopez.com/go/design-system) | Resolves `go/design-system` and increments usage counter |
+| **API Health Check** | [https://golinks.irvin-lopez.com/api/health](https://golinks.irvin-lopez.com/api/health) | Service and SQLite liveness endpoint with `X-Request-Id` |
+| **GitHub Repository** | [https://github.com/irvindev9/go-links](https://github.com/irvindev9/go-links) | Source code, specification, business rules, and Jest suite |
 
 > **Specification & Business Rules**:
 > - [`SPEC.md`](./SPEC.md): Formal functional requirements (`FR-01`–`FR-06`), data model, API contract, and observability/accessibility standards.
