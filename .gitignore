@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# Logs & OS
+*.log
+.DS_Store
+
+# Environment variables
+.env
+.env.*
+!.env.example
